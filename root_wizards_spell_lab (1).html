@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Root Wizards Spell Lab</title>
+<style>
+:root{--ink:#252044;--purple:#6046a5;--violet:#8b6bd1;--gold:#ffd166;--cream:#fffaf0;--mint:#c9f2df;--pink:#ffe0ef}
+*{box-sizing:border-box}body{margin:0;font-family:Trebuchet MS,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#f2eaff,#e8f7ff 55%,#fff4db);min-height:100vh}
+header{padding:28px 18px 22px;text-align:center;color:white;background:radial-gradient(circle at 20% 10%,#9879d9,transparent 30%),linear-gradient(120deg,#34245f,#6448a2);position:relative;overflow:hidden}
+header:after{content:"✦  ·  ✧      ✦       ·  ✧";position:absolute;top:12px;right:5%;font-size:25px;color:#ffe7a1;opacity:.8}
+h1{font-size:clamp(2rem,5vw,3.2rem);margin:3px 0 8px;letter-spacing:.5px}header p{margin:0;font-size:1.08rem}
+.wrap{max-width:1080px;margin:auto;padding:20px}
+.tabs{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:2px auto 20px}
+.tab,button{border:0;border-radius:14px;padding:11px 16px;font-weight:800;font-size:1rem;cursor:pointer;background:#fff;color:var(--purple);box-shadow:0 3px 0 #d6c9ef;transition:.15s}
+.tab.active,button.primary{background:var(--purple);color:white;box-shadow:0 3px 0 #3e2c70}.tab:hover,button:hover{transform:translateY(-2px)}
+.panel{display:none;background:#ffffffdf;border:2px solid #e3d8f7;border-radius:22px;padding:clamp(16px,3vw,28px);box-shadow:0 10px 28px #43316a15}.panel.active{display:block}
+h2{margin:0 0 8px;color:#4d347f;font-size:1.65rem}h3{color:#4d347f;margin:12px 0 7px}.sub{color:#655d79;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#f7f2ff;border:1px solid #e3d8f7;border-radius:16px;padding:15px}.root{font-size:1.35rem;font-weight:900;color:#4c3187}.meaning{font-weight:700;color:#403953}.example{font-size:.9rem;color:#706783;margin-top:5px}
+label{font-weight:800;display:block;margin:12px 0 6px}select,input{width:100%;padding:12px;border:2px solid #d9cbed;border-radius:12px;background:white;color:var(--ink);font-size:1rem}
+.spell-output{margin-top:18px;padding:20px;border-radius:18px;background:linear-gradient(120deg,#33215f,#7955b7);color:white;text-align:center;min-height:145px}.spell-output .name{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;color:#ffe28a}.spell-output p{margin:7px 0}.small{font-size:.9rem;opacity:.9}
+.feedback{min-height:28px;font-weight:800;margin:12px 0}.good{color:#147348}.bad{color:#a53b50}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.question{font-size:1.15rem;font-weight:800;margin:18px 0}.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}.choices button{background:#f3edff;color:#493276;box-shadow:0 3px 0 #d6c9ef}.choices button:disabled{opacity:.75;cursor:default}
+.progress{height:12px;background:#e8e0f4;border-radius:20px;overflow:hidden;margin:12px 0}.bar{height:100%;width:0;background:#7bc9a4;transition:width .25s}
+footer{text-align:center;color:#716786;font-size:.85rem;padding:24px}
+.badge{display:inline-block;background:#fff0bd;color:#624a17;border-radius:20px;padding:5px 10px;font-size:.8rem;font-weight:900}
+@media(max-width:520px){.wrap{padding:12px}.tab{flex:1 1 42%}}
+</style>
+</head>
+<body>
+<header><div class="badge">A Greek & Latin Root Word Adventure</div><h1>🪄 Root Wizards Spell Lab</h1><p>Mix two word roots. Invent a spell. Discover the power of words!</p></header>
+<main class="wrap">
+<nav class="tabs" aria-label="Activities">
+<button class="tab active" data-tab="lab">✨ Spell Lab</button><button class="tab" data-tab="library">📚 Root Library</button><button class="tab" data-tab="review">🧠 Root Review</button><button class="tab" data-tab="match">🎯 Match Game</button><button class="tab" data-tab="challenge">🏆 Spell Challenge</button>
+</nav>
+<section id="lab" class="panel active">
+<h2>✨ Create Your Own Magic Spell</h2><p class="sub">Choose two roots. Combine their meanings to invent an original spell!</p>
+<div class="grid">
+<div><label for="root1">Choose your first root</label><select id="root1"></select></div>
+<div><label for="root2">Choose your second root</label><select id="root2"></select></div>
+</div>
+<label for="spellName">Give your spell a name</label><input id="spellName" maxlength="35" placeholder="Example: Aqua-Lumina Burst">
+<label for="spellPower">What will your spell do?</label><input id="spellPower" maxlength="100" placeholder="Example: It makes glowing water appear!">
+<div class="actions"><button class="primary" id="createSpell">✨ Create My Spell</button><button id="randomSpell">🎲 Surprise Me</button></div>
+<div class="spell-output" aria-live="polite"><div class="small">YOUR MAGIC SPELL WILL APPEAR HERE</div><div class="name" id="outName">The Spell of Wonder</div><p id="outRoots">Choose two roots to begin.</p><p id="outPower">Your imagination is the magic!</p></div>
+<p class="feedback" id="labFeedback" aria-live="polite"></p>
+</section>
+<section id="library" class="panel">
+<h2>📚 Root Word Library</h2><p class="sub">A root is a word part that carries meaning. Learn these roots before creating your spells.</p>
+<div class="grid" id="rootCards"></div>
+</section>
+<section id="review" class="panel">
+<h2>🧠 Root Review</h2><p class="sub">Read the meaning and choose the root that matches.</p>
+<div class="progress"><div class="bar" id="reviewBar"></div></div><div class="small" id="reviewCount">Question 1 of 10</div>
+<div class="question" id="reviewQuestion">Which root means water?</div><div class="choices" id="reviewChoices"></div><p class="feedback" id="reviewFeedback" aria-live="polite"></p><button class="primary" id="reviewNext" disabled>Next Question →</button>
+</section>
+<section id="match" class="panel">
+<h2>🎯 Root Match Game</h2><p class="sub">Match each root to its meaning. Choose one root and then its matching meaning.</p>
+<div class="grid"><div class="card"><h3>Roots</h3><div id="matchRoots" class="choices"></div></div><div class="card"><h3>Meanings</h3><div id="matchMeanings" class="choices"></div></div></div>
+<p class="feedback" id="matchFeedback" aria-live="polite"></p><div class="actions"><span class="badge" id="matchScore">Matches: 0 / 6</span><button id="newMatch">New Round</button></div>
+</section>
+<section id="challenge" class="panel">
+<h2>🏆 Two-Root Spell Challenge</h2><p class="sub">Can you become a Root Wizard? Answer each question to earn points.</p>
+<div class="progress"><div class="bar" id="challengeBar"></div></div><div class="small" id="challengeCount">Challenge 1 of 8</div>
+<div class="question" id="challengeQuestion"></div><div class="choices" id="challengeChoices"></div><p class="feedback" id="challengeFeedback" aria-live="polite"></p><button class="primary" id="challengeNext" disabled>Next Challenge →</button>
+</section>
+</main>
+<footer>Root Wizards Spell Lab • Learn roots, build words, and let your imagination shine!</footer>
+<script>
+const roots=[
+{r:"aqua",m:"water",lang:"Latin",e:"aquarium"},{r:"bio",m:"life",lang:"Greek",e:"biology"},{r:"geo",m:"earth",lang:"Greek",e:"geography"},{r:"photo",m:"light",lang:"Greek",e:"photograph"},{r:"tele",m:"far / distant",lang:"Greek",e:"telephone"},{r:"port",m:"carry",lang:"Latin",e:"transport"},{r:"spect",m:"look / see",lang:"Latin",e:"inspect"},{r:"dict",m:"say / speak",lang:"Latin",e:"dictate"},{r:"aud",m:"hear",lang:"Latin",e:"audio"},{r:"scrib / script",m:"write",lang:"Latin",e:"describe"},{r:"terr",m:"land / earth",lang:"Latin",e:"territory"},{r:"chron",m:"time",lang:"Greek",e:"chronology"},{r:"phon",m:"sound",lang:"Greek",e:"telephone"},{r:"therm",m:"heat",lang:"Greek",e:"thermometer"},{r:"micro",m:"small",lang:"Greek",e:"microscope"},{r:"mega",m:"great / large",lang:"Greek",e:"megaphone"},{r:"cycle",m:"circle / wheel",lang:"Greek",e:"bicycle"},{r:"ject",m:"throw",lang:"Latin",e:"project"}];
+const $=id=>document.getElementById(id);
+function options(){return roots.map((x,i)=>`<option value="${i}">${x.r} — ${x.m}</option>`).join("")}
+$("root1").innerHTML=options();$("root2").innerHTML=options();$("root2").selectedIndex=1;
+$("rootCards").innerHTML=roots.map(x=>`<article class="card"><div class="root">${x.r}</div><div class="meaning">${x.m}</div><div class="example">${x.lang} root • Example: ${x.e}</div></article>`).join("");
+function makeSpell(){let a=roots[+$("root1").value],b=roots[+$("root2").value];let n=$("spellName").value.trim()||`${a.r.toUpperCase()}-${b.r.toUpperCase()} Wonder`;let p=$("spellPower").value.trim()||`A spell combining ${a.m} and ${b.m}!`; $("outName").textContent=n;$("outRoots").textContent=`${a.r} = ${a.m}  +  ${b.r} = ${b.m}`;$("outPower").textContent=p;$("labFeedback").textContent="✨ Spell created! Explain how both root meanings work together.";$("labFeedback").className="feedback good"}
+$("createSpell").onclick=makeSpell;
+$("randomSpell").onclick=()=>{$("root1").selectedIndex=Math.floor(Math.random()*roots.length);$("root2").selectedIndex=(+$("root1").value+1+Math.floor(Math.random()*(roots.length-1)))%roots.length;$("spellName").value="";$("spellPower").value="";makeSpell()};
+document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{document.querySelectorAll(".tab,.panel").forEach(x=>x.classList.remove("active"));btn.classList.add("active");$(btn.dataset.tab).classList.add("active")});
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+let reviewSet=[],ri=0,rscore=0,rlocked=false;
+function startReview(){reviewSet=shuffle(roots).slice(0,10);ri=0;rscore=0;showReview()}
+function showReview(){let x=reviewSet[ri];rlocked=false;$("reviewCount").textContent=`Question ${ri+1} of 10 • Score: ${rscore}`;$("reviewBar").style.width=`${ri/10*100}%`;$("reviewQuestion").textContent=`Which root means “${x.m}”?`;$("reviewFeedback").textContent="";$("reviewNext").disabled=true;$("reviewNext").textContent=ri===9?"See Results":"Next Question →";let choices=shuffle([x,...shuffle(roots.filter(y=>y!==x)).slice(0,3)]);$("reviewChoices").innerHTML=choices.map(c=>`<button>${c.r}</button>`).join("");[...$("reviewChoices").children].forEach(btn=>btn.onclick=()=>{if(rlocked)return;rlocked=true;let ok=btn.textContent===x.r;if(ok)rscore++;btn.style.background=ok?"#c9f2df":"#ffe0ef";$("reviewFeedback").textContent=ok?"Correct! You earned a point.":`Good try! ${x.r} means ${x.m}.`;$("reviewFeedback").className="feedback "+(ok?"good":"bad");$("reviewCount").textContent=`Question ${ri+1} of 10 • Score: ${rscore}`;$("reviewNext").disabled=false})}
+$("reviewNext").onclick=()=>{if(ri===9){$("reviewQuestion").textContent=`You scored ${rscore} out of 10! ${rscore>=8?"Amazing Root Wizard work!":"Keep practicing—you are learning!"}`;$("reviewChoices").innerHTML="";$("reviewFeedback").textContent="Press Restart Review to play again.";$("reviewNext").textContent="Restart Review";$("reviewNext").onclick=startReview;$("reviewBar").style.width="100%"}else{ri++;showReview()}};
+startReview();
+let matchPairs=[],selected=null,matched=new Set();
+function startMatch(){matchPairs=shuffle(roots).slice(0,6);matched=new Set();selected=null;$("matchScore").textContent="Matches: 0 / 6";$("matchFeedback").textContent="";$("matchRoots").innerHTML=shuffle(matchPairs).map(x=>`<button data-root="${x.r}">${x.r}</button>`).join("");$("matchMeanings").innerHTML=shuffle(matchPairs).map(x=>`<button data-meaning="${x.r}">${x.m}</button>`).join("");[...$("matchRoots").children].forEach(b=>b.onclick=()=>{if(matched.has(b.dataset.root))return;selected=b.dataset.root;[...$("matchRoots").children].forEach(z=>z.style.outline="");b.style.outline="3px solid #8b6bd1";$("matchFeedback").textContent=`Now choose the meaning for ${selected}.`});[...$("matchMeanings").children].forEach(b=>b.onclick=()=>{if(!selected){$("matchFeedback").textContent="Choose a root first.";return}if(b.dataset.meaning===selected){matched.add(selected);b.disabled=true;b.style.background="#c9f2df";[...$("matchRoots").children].find(z=>z.dataset.root===selected).disabled=true;$("matchFeedback").textContent="That's a match! ✨";$("matchFeedback").className="feedback good";$("matchScore").textContent=`Matches: ${matched.size} / 6`;if(matched.size===6)$("matchFeedback").textContent="You matched them all! Root Wizard champion! 🏆"}else{$("matchFeedback").textContent="Not quite. Try another meaning!";$("matchFeedback").className="feedback bad"}selected=null;[...$("matchRoots").children].forEach(z=>z.style.outline="")})}
+$("newMatch").onclick=startMatch;startMatch();
+const challenges=[
+{q:"Which two roots could make a spell that sends a sound far away?",a:["tele + phon","bio + terr","aqua + therm"],c:0,why:"tele = far and phon = sound"},
+{q:"What does bio + photo combine?",a:["life + light","earth + time","write + hear"],c:0,why:"bio = life and photo = light"},
+{q:"Which pair could create a spell that carries something across the land?",a:["port + terr","aud + micro","chron + dict"],c:0,why:"port = carry and terr = land"},
+{q:"What does chron + aqua mean?",a:["time + water","heat + sound","small + life"],c:0,why:"chron = time and aqua = water"},
+{q:"Which root means “to look or see”?",a:["spect","ject","scrib"],c:0,why:"spect = look or see"},
+{q:"Which pair combines “write” and “life”?",a:["scrib + bio","therm + phon","mega + port"],c:0,why:"scrib/script = write and bio = life"},
+{q:"A spell makes a tiny object appear. Which root means small?",a:["micro","mega","tele"],c:0,why:"micro = small"},
+{q:"Which pair could make a spell that throws light?",a:["ject + photo","aud + cycle","dict + terr"],c:0,why:"ject = throw and photo = light"}
+];
+let ci=0,cscore=0,clock=false;
+function showChallenge(){let x=challenges[ci];clock=false;$("challengeCount").textContent=`Challenge ${ci+1} of 8 • Score: ${cscore}`;$("challengeBar").style.width=`${ci/8*100}%`;$("challengeQuestion").textContent=x.q;$("challengeFeedback").textContent="";$("challengeNext").disabled=true;$("challengeNext").textContent=ci===7?"See Results":"Next Challenge →";$("challengeChoices").innerHTML=x.a.map((a,i)=>`<button data-i="${i}">${a}</button>`).join("");[...$("challengeChoices").children].forEach(b=>b.onclick=()=>{if(clock)return;clock=true;let ok=+b.dataset.i===x.c;if(ok)cscore++;b.style.background=ok?"#c9f2df":"#ffe0ef";$("challengeFeedback").textContent=(ok?"Correct! ":"Not quite. ")+x.why+".";$("challengeFeedback").className="feedback "+(ok?"good":"bad");$("challengeCount").textContent=`Challenge ${ci+1} of 8 • Score: ${cscore}`;$("challengeNext").disabled=false})}
+$("challengeNext").onclick=()=>{if(ci===7){$("challengeQuestion").textContent=`You earned ${cscore} out of 8 points!`; $("challengeChoices").innerHTML="";$("challengeFeedback").textContent=cscore>=7?"Grand Root Wizard!":"Keep practicing and try again!";$("challengeNext").textContent="Play Again";$("challengeNext").onclick=()=>{ci=0;cscore=0;showChallenge()};$("challengeBar").style.width="100%"}else{ci++;showChallenge()}};
+showChallenge();
+</script>
+</body></html>
